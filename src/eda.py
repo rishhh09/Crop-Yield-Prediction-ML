@@ -8,6 +8,7 @@ import os
 # ---------- Paths ----------
 # Make sure data folder exists
 os.makedirs("data", exist_ok=True)
+os.makedirs("eda_charts", exist_ok=True)  
 RAW_DATA_PATH = os.path.join("data", "uttarakhand_crop_yield.csv")
 PROCESSED_DATA_PATH = os.path.join("data", "processed_dataset.csv")
 
@@ -69,22 +70,31 @@ numeric_features = [c for c in df.select_dtypes(include=[np.number]).columns.tol
 # ---------- Quick EDA Plots ----------
 df[numeric_features].hist(figsize=(12, 8), bins=30)
 plt.tight_layout()
+plt.savefig('eda_charts/1_histograms.png', dpi=300, bbox_inches='tight')  # ADDED: Save histogram
+print("✅ Saved: eda_charts/1_histograms.png")  
 plt.show()
 
 plt.figure(figsize=(10, 8))
 sns.heatmap(df[numeric_features + [target]].corr(), annot=True, cmap='coolwarm', fmt=".2f")
 plt.title('Feature Correlation Matrix')
+plt.savefig('eda_charts/2_correlation_heatmap.png', dpi=300, bbox_inches='tight')  # ADDED: Save heatmap
+print("✅ Saved: eda_charts/2_correlation_heatmap.png")
 plt.show()
 
+scatter_count = 0 
 for feature in numeric_features:
     if feature == target:
         continue
+    scatter_count += 1
     plt.figure(figsize=(6, 4))
     sns.scatterplot(x=df[feature], y=df[target])
     plt.title(f'{feature} vs {target}')
     plt.xlabel(feature)
     plt.ylabel(target)
     plt.tight_layout()
+    safe_filename = feature.replace(' ', '_').replace('/', '_')  # ADDED: Create safe filename
+    plt.savefig(f'eda_charts/3_scatter_{scatter_count}_{safe_filename}_vs_yield.png', dpi=300, bbox_inches='tight')  # ADDED: Save scatter plot
+    print(f"✅ Saved: eda_charts/3_scatter_{scatter_count}_{safe_filename}_vs_yield.png")  # ADDED: Confirmation message
     plt.show()
 
 # ---------- Encoding ----------

@@ -3,8 +3,11 @@ import joblib                           #To load .pkl file
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+import sys
+import os
 print("All libraries imported successfully.")
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 # --- 1. Define File Paths ---
 PIPELINE_PATH = 'models/final_pipeline.pkl'
 DATA_PATH = 'data/uttarakhand_crop_yield.csv'
